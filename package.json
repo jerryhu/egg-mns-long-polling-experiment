@@ -1,0 +1,46 @@
+{
+  "name": "egg-mns-long-polling-experiment",
+  "version": "1.0.0",
+  "description": "基于eggjs框架的阿里云消息服务MNS长轮询实践 | An Experiment of Aliyun MNS Long Polling based on eggjs framework",
+  "private": true,
+  "dependencies": {
+    "egg": "^2.7.1",
+    "egg-alicloud-mns": "^1.0.4",
+    "egg-scripts": "^2.6.0"
+  },
+  "devDependencies": {
+    "autod": "^3.0.1",
+    "autod-egg": "^1.1.0",
+    "egg-bin": "^4.7.0",
+    "egg-ci": "^1.8.0",
+    "egg-mock": "^3.17.0",
+    "eslint": "^4.19.1",
+    "eslint-config-egg": "^7.0.0",
+    "webstorm-disable-index": "^1.2.0",
+    "cross-env": "^5.1.6"
+  },
+  "engines": {
+    "node": ">=8.9.0"
+  },
+  "scripts": {
+    "start": "egg-scripts start --port=7001 --workers=1 --title=egg-mns-long-polling-experiment",
+    "stop": "egg-scripts stop --title=yangyin-app-schedule",
+    "dev": "egg-bin dev --port 7001",
+    "debug": "egg-bin debug",
+    "test": "npm run lint -- --fix && npm run test-local",
+    "test-local": "cross-env EGG_SERVER_ENV=unittest egg-bin test",
+    "cov": "cross-env EGG_SERVER_ENV=unittest egg-bin cov",
+    "lint": "eslint .",
+    "ci": "npm run lint && npm run cov",
+    "autod": "autod"
+  },
+  "ci": {
+    "version": "8"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "author": "",
+  "license": "MIT"
+}
