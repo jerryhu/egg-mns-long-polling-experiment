@@ -1,35 +1,47 @@
 'use strict';
 
-module.exports = {
-  schedule: {
-    type: 'mns',
-  },
-  async task(ctx, message) {
-    console.log(`task2: ${message}`);
+const Subscription = require('egg').Subscription;
 
-    const condition = true;
-    while (condition) {
-      try {
-        // 获取消息
-        const resp = await ctx.app.alicloudMns.receiveMessage('test-sms-queue', 5);
-        const data = Buffer.from(resp.body.MessageBody, 'base64').toString('utf8');
-        console.log(`task2: data: ${data}`);
+class Task2 extends Subscription {
+  static get schedule() {
+    return {
+      type: 'mns',
+    };
+  }
 
-        // TODO: 发送短信
+  async subscribe() {
+    this.logger.info('task2任务开始');
 
-        // 删除消息
-        await ctx.app.alicloudMns.deleteMessage('test-sms-queue', resp.body.ReceiptHandle);
-      } catch (err) {
-        if (err.name === 'MNSMessageNotExistError') {
-          console.log(`task2: 没有消息: ${new Date()}`);
-          continue;
-        }
+    await this.processMessage();
+  }
 
-        console.error(`task2: 获取消息出错 ${err.stack}`);
-        break;
+  // 消息处理
+  async processMessage() {
+    const queueName = 'test-sms-queue';
+
+    try {
+      // 获取消息
+      const resp = await this.app.alicloudMns.receiveMessage(queueName, 25);
+      const data = Buffer.from(resp.body.MessageBody, 'base64').toString('utf8');
+      console.log(`data: ${data}`);
+
+      // TODO: 发送短信
+
+      // 删除消息
+      await this.app.alicloudMns.deleteMessage(queueName, resp.body.ReceiptHandle);
+    } catch (err) {
+      if (err.name === 'MNSMessageNotExistError') {
+        console.log(`没有消息: ${new Date()}`);
+      } else {
+        console.error(`获取消息出错 ${err.stack}`);
+        return;
       }
     }
 
-  },
+    // 递归调用: 消息处理
+    await this.processMessage();
+  }
+
 }
-;
+
+module.exports = Task2;
