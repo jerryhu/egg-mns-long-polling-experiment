@@ -24,7 +24,7 @@
   },
   "scripts": {
     "start": "egg-scripts start --port=7001 --workers=1 --title=egg-mns-long-polling-experiment",
-    "stop": "egg-scripts stop --title=yangyin-app-schedule",
+    "stop": "egg-scripts stop --title=egg-mns-long-polling-experiment",
     "dev": "egg-bin dev --port 7001",
     "debug": "egg-bin debug",
     "test": "npm run lint -- --fix && npm run test-local",
